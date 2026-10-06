@@ -14,6 +14,7 @@ Streamlit page (`pages/planetary_industry.py`, registered in `app.py` as "Planet
   | P1   | 1042     | Basic Commodities - Tier 1          |
 
   Name is the English name (`name.en`).
+  Volume is the unit volume in m³ (`volume`).
 - **Recipes**: SDE `sde/jsonl/planetSchematics.jsonl`. Each schematic has exactly one output type and one or more input types, each with a quantity per cycle, and a `cycleTime` in seconds. Quantities are normalised to units per factory-hour (`quantity * 3600 / cycleTime`).
 - **Prices**: ESI `GET /markets/prices`, field `average_price`, joined on type ID. Cached for 1 hour. Commodities without a price show an empty price and empty derived values.
 
@@ -32,10 +33,11 @@ Each table is sorted **descending by P/I**. Rows without a price go last.
 | Commodity           | Commodity name                             | text                                     |
 | Recipe              | Recipe structure expression                | text, e.g. `3x2x2`                       |
 | Inputs              | Number of P1 input lines in the recipe     | integer                                  |
-| Average price (ISK) | ESI average price                          | thousand separators, 2 decimals          |
+| Average price       | ESI average price                          | thousand separators, 2 decimals          |
 | P/I                 | Average price / Inputs                     | thousand separators, 2 decimals          |
 | Planets/char        | Planets needed to produce 1 unit/hour      | 4 decimals                               |
 | kkISK/mo/char       | Monthly output value of one character, in millions of ISK | thousand separators, 2 decimals |
+| Vol/mo/char         | Monthly output volume of one character, in m³ | thousand separators, 2 decimals       |
 
 ### Recipe
 
@@ -92,3 +94,13 @@ average_price * 720 * 6 / Planets/char / 1,000,000
 ```
 
 where 720 is the hours in a 30-day month and 6 is planets per character.
+
+### Vol/mo/char
+
+The volume of the final product one character produces per month at perfect throughput, in m³:
+
+```
+volume * 720 * 6 / Planets/char
+```
+
+where `volume` is the commodity's unit volume from the SDE.

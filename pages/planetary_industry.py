@@ -30,7 +30,9 @@ def pi_commodities():
                 continue
             t = json.loads(line)
             if t.get("groupID") in group_ids and t.get("published"):
-                rows.append({"type_id": t["_key"], "group_id": t["groupID"], "name": t["name"]["en"]})
+                rows.append(
+                    {"type_id": t["_key"], "group_id": t["groupID"], "name": t["name"]["en"], "volume": t["volume"]}
+                )
     return pd.DataFrame(rows)
 
 
@@ -93,23 +95,24 @@ commodities[["recipe", "inputs"]] = pd.DataFrame(
 ).astype({1: int})
 commodities["price_per_input"] = commodities["average_price"] / commodities["inputs"]
 commodities["planets"] = [planets(t, 1, tiers, recipes) for t in commodities["type_id"]]
-commodities["isk_per_month"] = (
-    commodities["average_price"] * HOURS_PER_MONTH * PLANETS_PER_CHARACTER / commodities["planets"] / 1e6
-)
+units_per_month = HOURS_PER_MONTH * PLANETS_PER_CHARACTER / commodities["planets"]
+commodities["isk_per_month"] = commodities["average_price"] * units_per_month / 1e6
+commodities["volume_per_month"] = commodities["volume"] * units_per_month
 
 for tier, group_id in TIER_GROUPS.items():
     st.header(TIER_NAMES[tier])
     df = commodities[commodities["group_id"] == group_id].sort_values("price_per_input", ascending=False)
     st.dataframe(
-        df[["name", "recipe", "inputs", "average_price", "price_per_input", "planets", "isk_per_month"]],
+        df[["name", "recipe", "inputs", "average_price", "price_per_input", "planets", "isk_per_month", "volume_per_month"]],
         hide_index=True,
         column_config={
             "name": "Commodity",
             "recipe": "Recipe",
             "inputs": st.column_config.NumberColumn("Inputs"),
-            "average_price": st.column_config.NumberColumn("Average price (ISK)", format="accounting"),
+            "average_price": st.column_config.NumberColumn("Average price", format="accounting"),
             "price_per_input": st.column_config.NumberColumn("P/I", format="accounting"),
             "planets": st.column_config.NumberColumn("Planets/char", format="%.4f"),
             "isk_per_month": st.column_config.NumberColumn("kkISK/mo/char", format="accounting"),
+            "volume_per_month": st.column_config.NumberColumn("Vol/mo/char", format="accounting"),
         },
     )
