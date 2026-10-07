@@ -1,0 +1,8 @@
+services:
+  eve-things:
+    build: .
+    image: eve-things:latest
+    container_name: eve-things
+    ports:
+      - "8580:8580"
+    restart: unless-stopped

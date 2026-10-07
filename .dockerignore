@@ -1,0 +1,10 @@
+.git
+.gitignore
+.ropeproject
+**/__pycache__
+sde
+scripts
+specs
+Dockerfile
+compose.yaml
+.dockerignore
