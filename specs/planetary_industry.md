@@ -22,7 +22,7 @@ SDE-derived data is cached for the lifetime of the Streamlit process.
 
 ## Layout
 
-Title "Planetary Industry", then one section per tier, in the order P4, P3, P2, P1. Each section has a header with the group name (e.g. "Advanced Commodities - Tier 4") and a table of that tier's commodities, without an index column.
+Title "Planetary Industry", then a short introduction explaining what the page shows, the production assumptions and the meaning of each column, then one section per tier, in the order P4, P3, P2, P1. Each section has a header with the group name (e.g. "Advanced Commodities - Tier 4") and a table of that tier's commodities, without an index column.
 
 Each table is sorted **descending by P/I**. Rows without a price go last.
 

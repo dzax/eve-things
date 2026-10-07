@@ -86,6 +86,22 @@ def prices():
 
 
 st.title("Planetary Industry")
+st.markdown(
+    """
+Lists every planetary industry commodity with its current market price and an estimate of how much a single
+character can earn by producing it. Estimates assume max skills (6 planets), a standard setup (8 factories per planet
+for P1 with extraction and for P4, 24 for P2 and P3) and perfect throughput with no waste. Each table is sorted by P/I.
+
+- **Recipe**: production chain expanded down to P1, where `1` is one P1 input, `x` multiplies and `+` adds
+  (e.g. `3x2x2` is 3 inputs, each made of 2 inputs, each made of 2 P1).
+- **Inputs**: number of P1 input lines in the recipe.
+- **Average price**: ESI average market price, in ISK.
+- **P/I**: average price divided by inputs, i.e. value per P1 input line.
+- **Planets/char**: planets needed to produce 1 unit/hour, including the whole chain down to P1.
+- **kkISK/mo/char**: value one character produces per 30-day month, in millions of ISK.
+- **Vol/mo/char**: volume one character produces per 30-day month, in m³.
+"""
+)
 
 commodities = pi_commodities().join(prices()["average_price"], on="type_id")
 p1_ids = set(commodities.loc[commodities["group_id"] == TIER_GROUPS["P1"], "type_id"])
