@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="EVE Data", layout="wide")
+st.set_page_config(page_title="EVE Things", layout="wide")
 
 pages = [
     st.Page("pages/home.py", title="Home", default=True),

@@ -1,3 +1,3 @@
 import streamlit as st
 
-st.title("EVE Data")
+st.title("EVE Things")
