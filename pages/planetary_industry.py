@@ -1,3 +1,4 @@
+import gzip
 import json
 from collections import Counter
 
@@ -24,7 +25,7 @@ HOURS_PER_MONTH = 24 * 30
 def pi_commodities():
     group_ids = set(TIER_GROUPS.values())
     rows = []
-    with open("sde/jsonl/types.jsonl") as f:
+    with gzip.open("assets/sde/types.jsonl.gz", "rt") as f:
         for line in f:
             if '"groupID"' not in line:
                 continue
@@ -40,7 +41,7 @@ def pi_commodities():
 def schematics():
     """Map each schematic output type ID to its output and input quantities per factory-hour."""
     result = {}
-    with open("sde/jsonl/planetSchematics.jsonl") as f:
+    with gzip.open("assets/sde/planetSchematics.jsonl.gz", "rt") as f:
         for line in f:
             s = json.loads(line)
             cycles_per_hour = 3600 / s["cycleTime"]
